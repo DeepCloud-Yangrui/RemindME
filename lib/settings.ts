@@ -1,12 +1,24 @@
 // RemindME v1.0.1 — 铃声 + 震动偏好管理
 
-export type RingtoneId = "default" | "reflection" | "chimes" | "opening"
+export type RingtoneId =
+  | "default"
+  | "alarm"
+  | "arpeggioencoreinfinitum"
+  | "beacon"
+  | "blues"
+  | "bulletin"
+  | "bytheseaside"
+  | "circuit"
 
 export const RINGTONE_OPTIONS: { id: RingtoneId; label: string; desc: string }[] = [
   { id: "default", label: "系统默认", desc: "跟随系统通知音" },
-  { id: "reflection", label: "Reflection", desc: "欢快" },
-  { id: "chimes", label: "Chimes", desc: "叮当" },
-  { id: "opening", label: "Opening", desc: "开场" },
+  { id: "alarm", label: "经典闹钟", desc: "持续响铃" },
+  { id: "arpeggioencoreinfinitum", label: "无限琶音", desc: "悠扬旋律" },
+  { id: "beacon", label: "灯塔闪烁", desc: "清脆节奏" },
+  { id: "blues", label: "忧郁布鲁斯", desc: "深沉低音" },
+  { id: "bulletin", label: "简短公告", desc: "简洁提示音" },
+  { id: "bytheseaside", label: "在海滨边", desc: "清新海风" },
+  { id: "circuit", label: "科幻电路", desc: "电子脉冲" },
 ]
 
 function read<T>(key: string, fallback: T): T {
@@ -36,15 +48,20 @@ export function setVibrationEnabled(enabled: boolean): void {
 // ── 铃声选择 ──
 
 export function getRingtone(): RingtoneId {
-  return read<RingtoneId>("ringtone", "default")
+  return read<RingtoneId>("selected_sound", "default")
 }
 
 export function setRingtone(id: RingtoneId): void {
-  write("ringtone", id)
+  write("selected_sound", id)
 }
 
-/** 返回通知插件可用的 sound 值：default → undefined（走系统默认），否则传标识符 */
+/** 返回通知插件可用的 sound 值：default → undefined，否则传标识符（不带后缀） */
 export function getNotificationSound(): string | undefined {
   const id = getRingtone()
   return id === "default" ? undefined : id
+}
+
+/** 返回当前铃声对应的 Android 通知渠道 ID */
+export function getChannelId(): string {
+  return "channel_" + getRingtone()
 }
