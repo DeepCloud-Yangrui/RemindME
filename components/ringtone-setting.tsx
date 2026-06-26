@@ -4,6 +4,8 @@
 
 import { useState } from "react"
 import { Check, ChevronDown } from "lucide-react"
+import { Capacitor } from "@capacitor/core"
+import { Haptics, ImpactStyle } from "@capacitor/haptics"
 import {
   type RingtoneId,
   RINGTONE_OPTIONS,
@@ -26,6 +28,10 @@ export function RingtoneSetting() {
     setRingtone(id)
     playRingtonePreview(id)
     setOpen(false)
+    // 触觉反馈
+    if (Capacitor.isNativePlatform()) {
+      Haptics.impact({ style: ImpactStyle.Medium }).catch(() => {})
+    }
   }
 
   function toggleVibration() {

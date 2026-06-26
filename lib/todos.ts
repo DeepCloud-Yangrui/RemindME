@@ -2,7 +2,7 @@
 
 import { Capacitor } from "@capacitor/core"
 import { LocalNotifications } from "@capacitor/local-notifications"
-import { getNotificationSound, getVibrationEnabled, getChannelId } from "@/lib/settings"
+import { getNotificationSound, getChannelId } from "@/lib/settings"
 
 export interface Todo {
   id: number
@@ -48,7 +48,6 @@ async function ensureChannel(): Promise<void> {
   try {
     const channelId = getChannelId()
     const sound = getNotificationSound()
-    const vibration = getVibrationEnabled()
     await LocalNotifications.createChannel({
       id: channelId,
       name: "待办提醒",
@@ -56,7 +55,7 @@ async function ensureChannel(): Promise<void> {
       importance: 5,
       visibility: 1,
       ...(sound ? { sound } : {}),
-      vibration,
+      vibration: true,
       lights: true,
     })
   } catch (e) {
@@ -69,7 +68,6 @@ async function scheduleNotification(todo: Todo): Promise<void> {
   try {
     const channelId = getChannelId()
     const sound = getNotificationSound()
-    const vibration = getVibrationEnabled()
     await LocalNotifications.requestPermissions()
     await ensureChannel()
     await LocalNotifications.schedule({
@@ -81,7 +79,7 @@ async function scheduleNotification(todo: Todo): Promise<void> {
           channelId,
           schedule: { at: parseTriggerAt(todo.dueDate, todo.dueTime) },
           ...(sound ? { sound } : {}),
-          ...(vibration ? {} : { vibration: false }),
+          vibration: true,
           smallIcon: "ic_stat_remindme",
         },
       ],

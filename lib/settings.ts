@@ -70,18 +70,26 @@ export function getChannelId(): string {
 
 let previewAudio: HTMLAudioElement | null = null
 
-export function playRingtonePreview(id: RingtoneId): void {
+export async function playRingtonePreview(id: RingtoneId): Promise<void> {
   if (typeof window === "undefined") return
   if (id === "default") return
   try {
+    // 停掉上一个正在播放的音频
     if (previewAudio) {
       previewAudio.pause()
+      previewAudio.currentTime = 0
       previewAudio = null
     }
-    const audio = new Audio("/sounds/" + id + ".mp3")
-    audio.play().catch(() => {})
+    // 使用相对路径（不加开头的斜杠），兼容 Capacitor 文件加载
+    const audio = new Audio("sounds/" + id + ".mp3")
     previewAudio = audio
-  } catch {
-    // 浏览器限制静默忽略
+    await audio.play()
+    // 播放结束后释放引用
+    audio.addEventListener("ended", () => {
+      if (previewAudio === audio) previewAudio = null
+    })
+  } catch (e) {
+    console.error("音频播放失败:", e)
+    previewAudio = null
   }
 }
