@@ -44,8 +44,7 @@ export default function HistoryPage() {
 
   return (
     <main
-      className="mx-auto flex min-h-dvh w-full max-w-md flex-col px-6 pb-8"
-      style={{ paddingTop: "max(env(safe-area-inset-top), 24px)" }}
+      className="mx-auto flex min-h-dvh w-full max-w-md flex-col px-6 pt-14 pb-8"
     >
       <header className="mb-10 flex items-center">
         <Link

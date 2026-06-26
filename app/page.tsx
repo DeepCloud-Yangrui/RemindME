@@ -185,20 +185,15 @@ export default function HomePage() {
   return (
     <main
       className={cn(
-        "flex min-h-dvh flex-col items-center justify-center px-6 pb-8",
+        "flex min-h-dvh flex-col items-center justify-center px-6 pt-14 pb-8",
         editing && "justify-start",
       )}
-      style={{
-        paddingTop: editing
-          ? "calc(max(env(safe-area-inset-top), 24px) + 5rem)"
-          : "max(env(safe-area-inset-top), 24px)",
-      }}
     >
       {/* DIY 模式顶栏 */}
       {editing && (
         <div
           className="fixed inset-x-0 z-50 mx-auto flex max-w-md items-center justify-between px-6 py-4"
-          style={{ top: "max(env(safe-area-inset-top), 24px)" }}
+          style={{ top: "3.5rem" }}
         >
           <span className="text-xs uppercase tracking-widest text-muted-foreground/50">
             DIY 实验室
